@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tap/di/injection.dart';
 import '../bloc/bloc_cubit.dart';
 import '../bloc/bond_state.dart';
+import '../models/bond_detail.dart';
+import '../repositories/bond_repository.dart';
+import 'bond_detail_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,6 +18,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String _searchQuery = '';
   final TextEditingController _controller = TextEditingController();
+  BondDetail? _commonDetail;
+  bool _loadingDetail = false;
 
   @override
   void dispose() {
@@ -142,6 +148,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                 vertical: verticalPadding / 2,
                                 horizontal: horizontalPadding / 2,
                               ),
+                              onTap: () async {
+                                if (_commonDetail == null && !_loadingDetail) {
+                                  setState(() => _loadingDetail = true);
+                                  try {
+                                    final repo = getIt<BondRepository>();          // <<-- use getIt
+                                    final detail = await repo.getBondDetail();     // no parameter
+                                    setState(() => _commonDetail = detail);
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Failed to fetch detail')),
+                                    );
+                                  } finally {
+                                    setState(() => _loadingDetail = false);
+                                  }
+                                }
+                                if (_commonDetail != null) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => BondDetailScreen(detail: _commonDetail!),
+                                    ),
+                                  );
+                                }
+                              },
+
+
+
                               leading: Container(
                                 width: avatarSize,
                                 height: avatarSize,

@@ -1,12 +1,12 @@
 import 'package:injectable/injectable.dart';
-import '../models/bond_summary.dart';
-import '../models/bond_detail.dart';
-import '../services/detail_api_service.dart';
 
+import '../models/bond_detail.dart';
+import '../models/bond_summary.dart';
+import '../services/detail_api_service.dart';
 
 abstract class BondRepository {
   Future<List<BondSummary>> getAllBonds();
-  Future<BondDetail> getBondByIsin(String isin);
+  Future<BondDetail> getBondDetail(); // Remove parameter
 }
 
 @LazySingleton(as: BondRepository)
@@ -18,5 +18,6 @@ class BondRepositoryImpl implements BondRepository {
   Future<List<BondSummary>> getAllBonds() => _apiService.fetchBondSummaries();
 
   @override
-  Future<BondDetail> getBondByIsin(String isin) => _apiService.fetchBondDetail(isin);
+  Future<BondDetail> getBondDetail() => _apiService.fetchBondDetail();
 }
+

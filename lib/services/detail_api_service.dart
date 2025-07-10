@@ -5,7 +5,7 @@ import '../models/bond_detail.dart';
 
 abstract class ApiService {
   Future<List<BondSummary>> fetchBondSummaries();
-  Future<BondDetail> fetchBondDetail(String isin);
+  Future<BondDetail> fetchBondDetail();
 }
 
 @Injectable(as: ApiService)
@@ -28,8 +28,8 @@ class ApiServiceImpl implements ApiService {
   }
 
   @override
-  Future<BondDetail> fetchBondDetail(String isin) async {
-    final response = await _detailDio.get('/$isin');
+  Future<BondDetail> fetchBondDetail() async {
+    final response = await _detailDio.get('/');
     return BondDetail.fromJson(response.data as Map<String, dynamic>);
   }
 }
