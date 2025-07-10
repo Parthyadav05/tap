@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import '../models/bond_summary.dart';
 import '../repositories/bond_repository.dart';
+import 'bond_state.dart';
 
-part 'bond_state.dart';
+
 
 @injectable
 class BondCubit extends Cubit<BondState> {

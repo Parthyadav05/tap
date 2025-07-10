@@ -12,6 +12,7 @@
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:tap/bloc/bloc_cubit.dart' as _i763;
 import 'package:tap/di/modules.dart' as _i141;
 import 'package:tap/repositories/bond_repository.dart' as _i814;
 import 'package:tap/services/detail_api_service.dart' as _i48;
@@ -40,6 +41,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i814.BondRepository>(
       () => _i814.BondRepositoryImpl(gh<_i48.ApiService>()),
+    );
+    gh.factory<_i763.BondCubit>(
+      () => _i763.BondCubit(gh<_i814.BondRepository>()),
     );
     return this;
   }

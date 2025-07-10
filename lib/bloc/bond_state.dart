@@ -1,5 +1,3 @@
-part of 'bond_cubit.dart';
-
 import '../models/bond_summary.dart';
 
 abstract class BondState {}

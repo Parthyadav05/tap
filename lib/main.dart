@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tap/screens/home_main_view.dart';
 import '../di/injection.dart';
 import 'bloc/bloc_cubit.dart';
+import 'bloc/bond_state.dart';
 
 
 void main() {
@@ -21,43 +23,9 @@ class MyApp extends StatelessWidget {
       ),
       home: BlocProvider(
         create: (_) => getIt<BondCubit>()..fetchBonds(),
-        child: const HomeScreen(),
+        child: HomeScreen(),
       ),
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bonds List'),
-      ),
-      body: BlocBuilder<BondCubit, BondState>(
-        builder: (context, state) {
-          if (state is BondStateLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is BondStateLoaded) {
-            return ListView.builder(
-              itemCount: state.bonds.length,
-              itemBuilder: (context, index) {
-                final bond = state.bonds[index];
-                return ListTile(
-                  leading: Image.network(bond.logo),
-                  title: Text(bond.companyName),
-                  subtitle: Text('Rating: ${bond.rating}'),
-                );
-              },
-            );
-          } else if (state is BondStateError) {
-            return Center(child: Text('Error: ${state.message}'));
-          }
-          return const SizedBox.shrink();
-        },
-      ),
-    );
-  }
-}
